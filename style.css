@@ -1,0 +1,27 @@
+.changeBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+.stimuliBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border: 0px solid black;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+
+button {
+    border: unset;
+    padding: 10px;
+    border: 2px solid black;
+    border-radius: 15px;
+}
