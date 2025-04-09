@@ -13,18 +13,26 @@
 <body>
   <h1>Isophon-Experiment</h1>
 
+  <ul>
+    <li>Referenzton auf angenehme Lautheit kalibrieren (-> 65 dB)</li>
+    <li>Vergleichston gleich laut einstellen</li>
+    <li>Weiter</li>
+  </ul>
 
   <div class="stimuliBox">
     <div class="refBox">
-      <button>Referenzton<br>start/stop</button>
+      <button onclick="playSound(1000, dBToGain(65), 1)">Referenzton</button>
     </div>
     <div class="changeBox">
-      <button>+</button>
-      <button>Vergleichston<br>start/stop</button>
-      <button>-</button>
+      <button
+        onclick="testdBs[stimIndex]++; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">+</button>
+      <button id="vergleichsButton"
+        onclick="playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">Vergleichston<br>(1/8)</button>
+      <button
+        onclick="testdBs[stimIndex]--; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">-</button>
     </div>
     <div class="weiterBox">
-      <button>Weiter</button>
+      <button onclick="stimIndex++;updateButtonText();renderResults()">Weiter</button>
     </div>
   </div>
 
@@ -42,6 +50,32 @@
   <button id="startBtn">Start</button>
   <button id="stopBtn">Stop</button>
 -->
+
+
+  <table>
+    <tr>
+      <th>125</th>
+      <th>250</th>
+      <th>500</th>
+      <th>1000</th>
+      <th>2000</th>
+      <th>3000</th>
+      <th>4000</th>
+      <th>8000</th>
+    </tr>
+    <tr>
+      <td id="result0"></td>
+      <td id="result1"></td>
+      <td id="result2"></td>
+      <td id="result3"></td>
+      <td id="result4"></td>
+      <td id="result5"></td>
+      <td id="result6"></td>
+      <td id="result7"></td>
+    </tr>
+  </table>
+
+ <img src="http://bilder.hifi-forum.de/max/792595/isophone_448333.jpg">
 
 </body>
 
