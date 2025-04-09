@@ -84,12 +84,29 @@ function enableButtons() {
 function dBToGain(db) {
     const maxDb = 75; // 75 dB = max gain (1.0)
     const gain = Math.pow(10, (db - maxDb) / 20);
-    console.log(gain)
     return Math.min(Math.max(gain, 0), 1); // clamp gain between 0 and 1
+}
+
+function gainToDB(gain) {
+    return 20 * Math.log10(gain) + 75
+}
+
+
+function plusButton() {
+    testdBs[stimIndex]++;
+    playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
+}
+
+function minusButton() {
+    testdBs[stimIndex]--;
+    playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
 }
 
 
 function playSound(freq, gain, dur) {
+
+    console.log(gainToDB(gain))
+
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }

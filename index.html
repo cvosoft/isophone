@@ -22,15 +22,13 @@
 
   <div class="stimuliBox">
     <div class="refBox">
-      <button id="refButton" onclick="playSound(1000, dBToGain(65), duration)">Referenzton</button>
+      <button id="refButton" onclick="playSound(1000, dBToGain(refDB), duration)">Referenzton</button>
     </div>
     <div class="changeBox">
-      <button id="plusButton"
-        onclick="testdBs[stimIndex]++; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">+</button>
+      <button id="plusButton" onclick="plusButton()">+</button>
       <button id="vergleichsButton"
         onclick="playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">Vergleichston<br>(1/10)</button>
-      <button id="minusButton"
-        onclick="testdBs[stimIndex]--; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">-</button>
+      <button id="minusButton" onclick="minusButton()">-</button>
     </div>
     <div class="weiterBox">
       <button id="nextButton" onclick="nextStimulus();">Weiter</button>
