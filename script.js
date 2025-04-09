@@ -3,36 +3,86 @@ let currentOscillator = null;
 let currentGainNode = null;
 
 let isPlaying = false;
+let isOver = false;
 
 let refFreq = 1000;
-let duration = 0.5; // in s
+let duration = 0.75; // in s
 
-let refDB = 65;
+let refDB = 60;
 let refGain = dBToGain(refDB);
 
-let testFreqs = [125, 250, 500, 750, 1000, 2000, 3000, 4000, 6000, 8000];
-let testdBs = Array(testFreqs.length).fill(refDB - 20);
+let testFreqs = [100, 200, 500, 750, 1000, 2000, 3000, 5000];
+let testdBs = Array(testFreqs.length).fill(refDB - 10);
 let testGains = dBToGain(testdBs);
 
 
 let stimIndex = 0; // index des test-stimulus
 
+
+
 function updateButtonText() {
-    document.getElementById("vergleichsButton").innerHTML = `Vergleichston<br>(${stimIndex + 1}/8)`;
+    document.getElementById("vergleichsButton").innerHTML = `Vergleichston<br>(${stimIndex + 1}/${testFreqs.length})`;
 }
 
 
-function renderResults(){
+function renderResults() {
+
+    let table = document.getElementById("resultTable");
+
+    document.getElementById(`resultTable`).innerHTML += `
+    <tr>
+        <th>Referenz</th>
+    </tr>
+    <tr>
+        <td>0 dB</td>
+    </tr>
+    <tr>
+        <td><button onclick="playSound(${refFreq}, ${refGain}, ${duration})">Play</button></td>
+    </td>
+    `;
+
     for (let index = 0; index < testdBs.length; index++) {
-        const element = testdBs[index] - refDB;
-        document.getElementById(`result${index}`).innerHTML = `${element}`;
+        const freqValue = testFreqs[index];
+        const dBvalue = testdBs[index] - refDB;
 
+        document.getElementById(`resultTable`).innerHTML += `
+        <tr>
+            <th>${freqValue} Hz</th>
+        </tr>
+        <tr>
+            <td> ${dBvalue} dB</td>
+        </tr>
+        <tr>
+            <td><button onclick="playSound(${freqValue}, ${dBToGain(dBvalue + refDB)}, ${duration})">Play</button></td>
+        </td>
+        `;
     }
+
+
+
+
 }
 
+function disableButtons() {
+    document.getElementById('nextButton').disabled = true;
+    document.getElementById('refButton').disabled = true;
+    document.getElementById('vergleichsButton').disabled = true;
+    document.getElementById('plusButton').disabled = true;
+    document.getElementById('minusButton').disabled = true;
+
+}
+
+function enableButtons() {
+    document.getElementById('nextButton').disabled = false;
+    document.getElementById('refButton').disabled = false;
+    document.getElementById('vergleichsButton').disabled = false;
+    document.getElementById('plusButton').disabled = false;
+    document.getElementById('minusButton').disabled = false;
+
+}
 
 function dBToGain(db) {
-    const maxDb = 95; // 95 dB = max gain (1.0)
+    const maxDb = 75; // 75 dB = max gain (1.0)
     const gain = Math.pow(10, (db - maxDb) / 20);
     console.log(gain)
     return Math.min(Math.max(gain, 0), 1); // clamp gain between 0 and 1
@@ -42,6 +92,25 @@ function dBToGain(db) {
 function playSound(freq, gain, dur) {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    disableButtons();
+
+    // Vorherigen Ton stoppen, falls vorhanden
+    if (currentOscillator) {
+        try {
+            currentOscillator.stop();
+            currentOscillator.disconnect();
+        } catch (e) {
+            console.warn("Oscillator already stopped");
+        }
+    }
+    if (currentGainNode) {
+        try {
+            currentGainNode.disconnect();
+        } catch (e) {
+            console.warn("Gain node already disconnected");
+        }
     }
 
     const oscillator = audioCtx.createOscillator();
@@ -63,50 +132,45 @@ function playSound(freq, gain, dur) {
     oscillator.start(now);
     oscillator.stop(now + dur);
 
+    // ⬅️ wichtig: speichern für zukünftiges Stoppen
+    currentOscillator = oscillator;
+    currentGainNode = gainNode;
+
     // Cleanup
     setTimeout(() => {
-        oscillator.disconnect();
-        gainNode.disconnect();
-    }, dur * 1000 + 200); // 100ms extra wegen Fade
+        try {
+            oscillator.disconnect();
+            gainNode.disconnect();
+        } catch (e) {
+            // evtl. schon gestoppt
+        }
+
+        // 💡 Wichtig: Referenzen zurücksetzen
+        if (currentOscillator === oscillator) {
+            currentOscillator = null;
+            currentGainNode = null;
+        }
+
+        if (!isOver) {
+            enableButtons();
+        }
+
+    }, dur * 1000 + 200);
 }
 
 
-
-function playRefSound() {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    if (!isPlaying) {
-        console.log("Spiele Referenzton");
-
-        // Neues Oszillator-Setup bei jedem Start
-        const oscillator = audioCtx.createOscillator();
-        const gainNode = audioCtx.createGain();
-
-        oscillator.type = 'sine';
-        oscillator.frequency.setValueAtTime(refFreq, audioCtx.currentTime);
-        gainNode.gain.setValueAtTime(refGain, audioCtx.currentTime);
-
-        oscillator.connect(gainNode).connect(audioCtx.destination);
-        oscillator.start();
-
-        currentOscillator = oscillator;
-        currentGainNode = gainNode;
-        isPlaying = true;
+function nextStimulus() {
+    stimIndex++;
+    if (stimIndex <= testFreqs.length - 1) {
+        updateButtonText();
     } else {
-        console.log("Stoppe Referenzton");
-
-        if (currentOscillator) {
-            currentOscillator.stop();
-            currentOscillator.disconnect();
-        }
-        if (currentGainNode) {
-            currentGainNode.disconnect();
-        }
-
-        currentOscillator = null;
-        currentGainNode = null;
-        isPlaying = false;
+        isOver = true;
+        document.getElementById("resultCont").classList.remove("d-none");
+        renderResults();
+        document.getElementById('nextButton').disabled = true;
+        disableButtons();
     }
 }
+
+
+

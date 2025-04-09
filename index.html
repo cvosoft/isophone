@@ -14,68 +14,43 @@
   <h1>Isophon-Experiment</h1>
 
   <ul>
-    <li>Referenzton auf angenehme Lautheit kalibrieren (-> 65 dB)</li>
-    <li>Vergleichston gleich laut einstellen</li>
-    <li>Weiter</li>
+    <li>Referenzton auf angenehme Lautheit kalibrieren</li>
+    <li>Aktuellen Vergleichston gleich laut einstellen</li>
+    <li>"Weiter" drücken</li>
   </ul>
 
   <div class="stimuliBox">
     <div class="refBox">
-      <button onclick="playSound(1000, dBToGain(65), 1)">Referenzton</button>
+      <button id="refButton" onclick="playSound(1000, dBToGain(65), duration)">Referenzton</button>
     </div>
     <div class="changeBox">
-      <button
-        onclick="testdBs[stimIndex]++; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">+</button>
+      <button id="plusButton"
+        onclick="testdBs[stimIndex]++; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">+</button>
       <button id="vergleichsButton"
-        onclick="playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">Vergleichston<br>(1/8)</button>
-      <button
-        onclick="testdBs[stimIndex]--; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), 1)">-</button>
+        onclick="playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">Vergleichston<br>(1/10)</button>
+      <button id="minusButton"
+        onclick="testdBs[stimIndex]--; playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)">-</button>
     </div>
     <div class="weiterBox">
-      <button onclick="stimIndex++;updateButtonText();renderResults()">Weiter</button>
+      <button id="nextButton" onclick="nextStimulus();">Weiter</button>
     </div>
   </div>
 
-  <!--
-  <label for="frequency">Frequenz (Hz):</label>
-  <input type="range" id="frequency" min="20" max="2000" value="440">
-  <span id="freqVal">440</span> Hz
-  <br>
-
-  <label for="volume">Pegel (Gain):</label>
-  <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
-  <span id="gainVal">0.5</span>
-  <br>
-
-  <button id="startBtn">Start</button>
-  <button id="stopBtn">Stop</button>
--->
 
 
-  <table>
-    <tr>
-      <th>125</th>
-      <th>250</th>
-      <th>500</th>
-      <th>1000</th>
-      <th>2000</th>
-      <th>3000</th>
-      <th>4000</th>
-      <th>8000</th>
-    </tr>
-    <tr>
-      <td id="result0"></td>
-      <td id="result1"></td>
-      <td id="result2"></td>
-      <td id="result3"></td>
-      <td id="result4"></td>
-      <td id="result5"></td>
-      <td id="result6"></td>
-      <td id="result7"></td>
-    </tr>
-  </table>
 
- <img src="http://bilder.hifi-forum.de/max/792595/isophone_448333.jpg">
+  <div id="resultCont" class="resultCont d-none">
+
+    <div>
+      <table id="resultTable">
+      </table>
+      <div>
+        Passen die Ergebnisse grob zur 60 phon-Isophone?
+      </div>
+    </div>
+
+    <img src="http://bilder.hifi-forum.de/max/792595/isophone_448333.jpg">
+  </div>
 
 </body>
 
