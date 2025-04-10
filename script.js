@@ -72,7 +72,9 @@ function disableButtons() {
     document.getElementById('refButton').disabled = true;
     document.getElementById('vergleichsButton').disabled = true;
     document.getElementById('plusButton').disabled = true;
+    document.getElementById('plusPlusButton').disabled = true;
     document.getElementById('minusButton').disabled = true;
+    document.getElementById('minusMinusButton').disabled = true;
     document.getElementById('backButton').disabled = true;
 }
 
@@ -81,7 +83,9 @@ function enableButtons() {
     document.getElementById('refButton').disabled = false;
     document.getElementById('vergleichsButton').disabled = false;
     document.getElementById('plusButton').disabled = false;
+    document.getElementById('plusPlusButton').disabled = false;
     document.getElementById('minusButton').disabled = false;
+    document.getElementById('minusMinusButton').disabled = false;
 
     if (stimIndex == 0) { document.getElementById('backButton').disabled = true; }
     else {
@@ -106,8 +110,18 @@ function plusButton() {
     playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
 }
 
+function plusPlusButton() {
+    testdBs[stimIndex] += 2;
+    playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
+}
+
 function minusButton() {
     testdBs[stimIndex]--;
+    playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
+}
+
+function minusMinusButton() {
+    testdBs[stimIndex] -= 2;
     playSound(testFreqs[stimIndex], dBToGain(testdBs[stimIndex]), duration)
 }
 
