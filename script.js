@@ -21,6 +21,7 @@ let stimIndex = 0; // index des test-stimulus
 
 function onLoad() {
     document.getElementById('backButton').disabled = true;
+    document.getElementById('vergleichsButton').innerHTML = `Vergleichston<br>(1/${testFreqs.length})`;
 }
 
 
