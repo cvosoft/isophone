@@ -11,7 +11,7 @@ let duration = 0.75; // in s
 let refDB = 60;
 let refGain = dBToGain(refDB);
 
-let testFreqs = [100, 200, 500, 750, 1000, 2000, 3000, 5000];
+let testFreqs = [100, 200, 500, 750, 1000, 2000, 3000, 5000, 8000];
 let testdBs = Array(testFreqs.length).fill(refDB - 10);
 let testGains = dBToGain(testdBs);
 
