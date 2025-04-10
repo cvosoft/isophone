@@ -11,7 +11,7 @@
   <script src="script.js"></script>
 </head>
 
-<body>
+<body onload="onLoad()">
   <h1>Isophonen-Experiment</h1>
 
   <ul>
@@ -31,6 +31,7 @@
       <button id="minusButton" onclick="minusButton()">-</button>
     </div>
     <div class="weiterBox">
+      <button id="backButton" onclick="beforeStimulus();">Zurück</button>
       <button id="nextButton" onclick="nextStimulus();">Weiter</button>
     </div>
   </div>
@@ -50,6 +51,8 @@
 
     <img src="isophone.jpg">
   </div>
+
+
 
 </body>
 

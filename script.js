@@ -19,6 +19,10 @@ let testGains = dBToGain(testdBs);
 let stimIndex = 0; // index des test-stimulus
 
 
+function onLoad() {
+    document.getElementById('backButton').disabled = true;
+}
+
 
 function updateButtonText() {
     document.getElementById("vergleichsButton").innerHTML = `Vergleichston<br>(${stimIndex + 1}/${testFreqs.length})`;
@@ -69,7 +73,7 @@ function disableButtons() {
     document.getElementById('vergleichsButton').disabled = true;
     document.getElementById('plusButton').disabled = true;
     document.getElementById('minusButton').disabled = true;
-
+    document.getElementById('backButton').disabled = true;
 }
 
 function enableButtons() {
@@ -78,6 +82,11 @@ function enableButtons() {
     document.getElementById('vergleichsButton').disabled = false;
     document.getElementById('plusButton').disabled = false;
     document.getElementById('minusButton').disabled = false;
+
+    if (stimIndex == 0) { document.getElementById('backButton').disabled = true; }
+    else {
+        document.getElementById('backButton').disabled = false;
+    }
 
 }
 
@@ -178,16 +187,28 @@ function playSound(freq, gain, dur) {
 
 function nextStimulus() {
     stimIndex++;
+
+    if (stimIndex > 0) document.getElementById('backButton').disabled = false;
+
+
     if (stimIndex <= testFreqs.length - 1) {
         updateButtonText();
     } else {
         isOver = true;
         document.getElementById("resultCont").classList.remove("d-none");
         renderResults();
-        document.getElementById('nextButton').disabled = true;
         disableButtons();
     }
 }
 
 
 
+function beforeStimulus() {
+    stimIndex--;
+
+    if (stimIndex == 0) document.getElementById('backButton').disabled = true;
+
+    if (stimIndex <= testFreqs.length - 1) {
+        updateButtonText();
+    }
+}

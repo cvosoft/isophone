@@ -5,6 +5,13 @@
     justify-content: center;
 }
 
+.weiterBox {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
 .stimuliBox {
     display: flex;
     align-items: center;
